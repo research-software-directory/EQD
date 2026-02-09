@@ -15,7 +15,8 @@
 services:
   database:
     container_name: database
-    image: ghcr.io/research-software-directory/rsd-saas/database:latest
+    # use main RSD image for EQD
+    image: ghcr.io/research-software-directory/rsd-saas/database:v6.0.0
     expose:
       - 5432
     environment:
@@ -41,7 +42,8 @@ services:
 
   backend:
     container_name: backend
-    image: ghcr.io/research-software-directory/rsd-saas/backend:latest
+    # use main RSD image for EQD
+    image: ghcr.io/research-software-directory/rsd-saas/backend:v6.0.0
     expose:
       - 3500
     environment:
@@ -60,7 +62,8 @@ services:
 
   auth:
     container_name: auth
-    image: ghcr.io/research-software-directory/rsd-saas/auth:latest
+    # use main RSD image for EQD
+    image: ghcr.io/research-software-directory/rsd-saas/auth:v6.0.0
     expose:
       - 7000
     environment:
@@ -103,7 +106,8 @@ services:
 
   background-services:
     container_name: background-services
-    image: ghcr.io/research-software-directory/rsd-saas/background-services:latest
+    # use main RSD image for EQD
+    image: ghcr.io/research-software-directory/rsd-saas/background-services:v6.0.0
     environment:
       # it uses values from .env file
       - POSTGRES_DB_HOST
@@ -119,7 +123,7 @@ services:
 
   frontend:
     container_name: frontend
-    image: ghcr.io/research-software-directory/rsd-saas/frontend:latest
+    image: ghcr.io/research-software-directory/eqd/frontend:latest
     environment:
       # it uses values from .env file
       - POSTGREST_URL
@@ -145,7 +149,8 @@ services:
 
   scrapers:
     container_name: scrapers
-    image: ghcr.io/research-software-directory/rsd-saas/scrapers:latest
+    # use main RSD image for EQD
+    image: ghcr.io/research-software-directory/rsd-saas/scrapers:v6.0.0
     environment:
       # it uses values from .env file
       - POSTGREST_URL
@@ -171,7 +176,8 @@ services:
 
   codemeta:
     container_name: codemeta
-    image: ghcr.io/research-software-directory/rsd-saas/codemeta:latest
+    # use main RSD image for EQD
+    image: ghcr.io/research-software-directory/rsd-saas/codemeta:v6.0.0
     expose:
       - "8000"
     environment:
@@ -198,7 +204,8 @@ services:
 
   documentation:
     container_name: documentation
-    image: ghcr.io/research-software-directory/rsd-saas/documentation:latest
+    # use main RSD image for EQD
+    image: ghcr.io/research-software-directory/rsd-saas/documentation:v6.0.0
     expose:
       - "80"
     networks:
