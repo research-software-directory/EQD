@@ -45,19 +45,20 @@ export default function AppHeader() {
         <div className="w-full flex-1 flex items-center justify-between">
           <Link href="/" passHref className="hover:text-inherit" aria-label="Link to home page">
             <LogoApp
-              className="hidden 2xl:block"
+              // className="hidden 2xl:block"
               loading='eager'
               // lighthouse audit requires explicit width and height
-              width="100%"
-              height="1.5rem"
+              width="8rem"
+              height="3rem"
             />
-            <LogoAppSmall
+            {/* EQD does not uses small/narrow logo */}
+            {/* <LogoAppSmall
               className="2xl:hidden"
               loading='eager'
               // lighthouse audit requires explicit width and height
               width="7rem"
               height="1.5rem"
-            />
+            /> */}
           </Link>
 
           {/* Global search for desktop */}

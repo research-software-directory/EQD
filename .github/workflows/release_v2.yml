@@ -1,0 +1,181 @@
+name: release_v2
+
+# -------------------------------------------------------------------------
+# TRIGGER LOGIC
+# -------------------------------------------------------------------------
+on:
+  workflow_dispatch:
+    inputs:
+      pre_release:
+        description: 'Create pre-release version (e.g., v1.0.0-rc.0)'
+        type: boolean
+        default: false
+      version_override:
+        description: 'Force specific version e.g. v1.0.0-beta.1 (leave empty for conventional changelog).'
+        type: string
+        required: false
+  push:
+    branches:
+      - release
+
+# -------------------------------------------------------------------------
+# GLOBAL SETTINGS
+# -------------------------------------------------------------------------
+# Concurrency: Prevents multiple release workflows from running at the same time.
+# If a new one starts, the old one is cancelled to prevent tag collisions.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Permissions: Modern GHA requires explicit permissions to write tags and
+# upload images to the GitHub Container Registry (GHCR).
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  # -------------------------------------------------------------------------
+  # Section 1: VERSIONING & CHANGELOG
+  # -------------------------------------------------------------------------
+  release_tag:
+    name: conventional changelog
+    runs-on: ubuntu-22.04
+    outputs:
+       # Priority: 1. Manual Input -> 2. Action's calculated tag
+      tag: ${{ github.event.inputs.version_override || steps.changelog.outputs.tag }}
+      changelog: ${{ steps.changelog.outputs.clean_changelog }}
+      skipped: ${{ steps.changelog.outputs.skipped }}
+    steps:
+      - name: checkout all history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: calculate new version and create changelog content
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v6
+        with:
+          # you can also create separate token to trace action
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          # do not create changelog file, the content is used at next step for release body
+          output-file: false
+          # do not create additional commit, just tag current commit with the version
+          skip-commit: true
+          # do not pull - we already checked out the selection we want to use for versioning in previous step
+          skip-git-pull: true
+          # skip tag push - it will not push but it will tag
+          git-push: false
+          # skip tagging the release will provide tag
+          skip-tag: true
+          # initial version if no tag present
+          fallback-version: 1.0.0
+          # prevents workflow from stopping if there are no "feat" or "fix" commits
+          skip-on-empty: false
+          # pass pre-release boolean safely
+          pre-release: ${{ github.event.inputs.pre_release == 'true' }}
+
+  # -------------------------------------------------------------------------
+  # Section 1: LOG release tag
+  # -------------------------------------------------------------------------
+  log_release_tag:
+    needs: release_tag
+    name: log version output
+    runs-on: ubuntu-22.04
+    steps:
+      - name: info
+        run: |
+          echo skipped=${{needs.release_tag.outputs.skipped}}
+          echo tag=${{needs.release_tag.outputs.tag}}
+
+  # -------------------------------------------------------------------------
+  # Section 2: DOCKER BUILDS (Parallel)
+  # -------------------------------------------------------------------------
+  frontend:
+    # Uses the final 'tag' output from JOB 1 (either manual or auto)
+    if: needs.release_tag.outputs.skipped == 'false' || github.event.inputs.version_override != ''
+    needs: release_tag
+    name: frontend
+    uses: ./.github/workflows/_ghcr.yml
+    with:
+      ghcr_user: ${{ github.actor }}
+      base_image_name: ghcr.io/research-software-directory/eqd/frontend
+      image_tag: ${{ needs.release_tag.outputs.tag }}
+      dockerfile: frontend/Dockerfile
+      docker_context: ./frontend
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+
+  nginx:
+    if: needs.release_tag.outputs.skipped == 'false' || github.event.inputs.version_override != ''
+    needs: release_tag
+    name: nginx
+    uses: ./.github/workflows/_ghcr.yml
+    with:
+      ghcr_user: ${{ github.actor }}
+      base_image_name: ghcr.io/research-software-directory/eqd/nginx
+      image_tag: ${{ needs.release_tag.outputs.tag }}
+      dockerfile: nginx/Dockerfile
+      docker_context: ./nginx
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+
+  # -------------------------------------------------------------------------
+  # Section 3: PACKAGING DEPLOYMENT ASSETS
+  # -------------------------------------------------------------------------
+  deployment_files:
+    if: needs.release_tag.outputs.skipped == 'false' || github.event.inputs.version_override != ''
+    needs: [release_tag,frontend,nginx]
+    name: create deployment.zip
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checkout branch
+        uses: actions/checkout@v4
+
+      - name: update docker-compose.yml
+        run: |
+          # Inject the version into the compose file for the zip artifact
+          sed -i -e 's/:latest/:${{ needs.release_tag.outputs.tag }}/g' ./deployment/docker-compose.yml
+          # cat ./deployment/docker-compose.yml
+      - name: zip deployment files
+        run: |
+          zip --junk-paths deployment.zip \
+            ./nginx/nginx.conf \
+            ./deployment/docker-compose.yml \
+            ./.env.example \
+            ./deployment/README.md
+
+      - name: Upload deployment.zip
+        # https://github.com/actions/upload-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment
+          path: deployment.zip
+
+  # -------------------------------------------------------------------------
+  # Section 4: GITHUB RELEASE DRAFT
+  # -------------------------------------------------------------------------
+  release_draft:
+    if: needs.release_tag.outputs.skipped == 'false' || github.event.inputs.version_override != ''
+    needs: [ release_tag, deployment_files, frontend, nginx ]
+    name: create release draft
+    runs-on: ubuntu-22.04
+    steps:
+      - name: get deployment.zip
+        uses: actions/download-artifact@v4
+        with:
+          name: deployment
+
+      - name: create release draft
+        uses: softprops/action-gh-release@v2
+        env:
+          # The token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          tag_name: ${{ needs.release_tag.outputs.tag }}
+          name: ${{ needs.release_tag.outputs.tag }}
+          # Use auto-changelog if available, else a placeholder for manual overrides
+          body: ${{ needs.release_tag.outputs.changelog || 'Manual Release' }}
+          draft: true
+          prerelease: ${{ github.event.inputs.pre_release == 'true' }}
+          files: deployment.zip
+          target_commitish: ${{ github.sha }}
