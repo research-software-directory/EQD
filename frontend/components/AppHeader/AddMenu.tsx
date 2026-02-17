@@ -65,9 +65,6 @@ export default function AddMenu() {
         onClick={handleClick}
         sx={{
           color: 'primary.contrastText',
-          '&:hover': {
-            color: 'primary.main'
-          },
           alignSelf: 'center',
           '&:focus-visible': {
             outline: 'auto'
