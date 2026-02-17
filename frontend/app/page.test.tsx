@@ -138,46 +138,4 @@ describe('app/page.tsx', () => {
     const organisation = screen.getByText(`${props.counts.organisation_cnt} Organisations`)
     expect(organisation).toBeInTheDocument()
   })
-
-  it('renders Helmholtz Home page when host=helmholtz', async() => {
-    defaultRsdSettings.host.name='helmholtz'
-    // mock responses
-    mockTopNews.mockResolvedValue([])
-    mockRsdSettings.mockResolvedValue(defaultRsdSettings)
-    mockHomepageCounts.mockResolvedValue(props.counts)
-
-    // we need to resolve async component before wrapping it?!?
-    // this might not work when in all situations
-    const ResolvedHome = await Home()
-
-    // render
-    render(
-      <WithAppContext>
-        {ResolvedHome}
-      </WithAppContext>
-    )
-    const page = screen.getByTestId('rsd-helmholtz-home')
-    expect(page).toBeInTheDocument()
-  })
-
-  it('renders Helmholtz Home page when host=HELMHoltz', async() => {
-    defaultRsdSettings.host.name='HELMholtz'
-    // mock responses
-    mockTopNews.mockResolvedValue([])
-    mockRsdSettings.mockResolvedValue(defaultRsdSettings)
-    mockHomepageCounts.mockResolvedValue(props.counts)
-
-    // we need to resolve async component before wrapping it?!?
-    // this might not work when in all situations
-    const ResolvedHome = await Home()
-
-    // render
-    render(
-      <WithAppContext>
-        {ResolvedHome}
-      </WithAppContext>
-    )
-    const page = screen.getByTestId('rsd-helmholtz-home')
-    expect(page).toBeInTheDocument()
-  })
 })

@@ -12,7 +12,7 @@ import Link from 'next/link'
 import {usePathname} from 'next/navigation'
 
 import LogoApp from '~/assets/LogoApp.svg'
-import LogoAppSmall from '~/assets/LogoAppSmall.svg'
+// import LogoAppSmall from '~/assets/LogoAppSmall.svg'
 import {useSession} from '~/auth/AuthProvider'
 import useRsdSettings from '~/config/useRsdSettings'
 import LoginButton from '~/components/login/LoginButton'

@@ -24,12 +24,16 @@ export default function AppFooter () {
       <div className="grid grid-cols-1 gap-8 px-4 md:grid-cols-[2fr_1fr] lg:container lg:mx-auto">
         <div className="pt-8 md:py-8">
           <p className="text-lg">
-            The Research Software Directory promotes the impact, re-use and citation of research software.
+            The EQD promotes open, continent-wide collaboration for European quantum software and projects.
           </p>
 
           <ContactEmail email={host?.email} headers={host?.emailHeaders} />
           <div className="py-4"></div>
           <OrganisationLogo host={host} />
+          {/* RSD note */}
+          <p className= "text-xs py-4 mx-auto lg:container lg:mx-auto">
+            The EQD is adapted instance of RSD (Research Software Directory) developed by The Netherlands eScience Center.
+          </p>
         </div>
         <div className="pb-8 md:py-8 flex flex-col gap-2">
           <MarkdownPages pages={pages ?? []} />
