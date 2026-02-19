@@ -9,9 +9,7 @@ import {app} from '~/config/app'
 import {getRsdSettings} from '~/config/getSettingsServerSide'
 import {activeModulesKeys} from '~/config/rsdSettingsReducer'
 import {getHomepageCounts, HomepageCounts} from '~/components/home/getHomepageCounts'
-import HelmholtzHome from '~/components/home/helmholtz'
-import ImperialCollegeHome from '~/components/home/imperial'
-import RsdHome from '~/components/home/rsd'
+import EQDHome from '~/components/home/eqd'
 import {getTopNews, TopNewsProps} from '~/components/news/apiNews'
 
 export type HomeProps = {
@@ -47,22 +45,8 @@ export default async function Home() {
   // console.log('news...', news)
   // console.log('host...', host)
   // console.groupEnd()
-
-  if (settings?.host && settings?.host.name) {
-    switch (settings.host.name.toLocaleLowerCase()) {
-      case 'helmholtz':
-        return <HelmholtzHome counts={counts} news={news}/>
-      case 'imperial':
-        return <ImperialCollegeHome counts={counts} news={news} />
-      default:
-        // RSD default homepage
-        return (
-          <RsdHome counts={counts} news={news} />
-        )
-    }
-  }
-  // // RSD default home page
+  // EQD default home page
   return (
-    <RsdHome counts={counts} news={news} />
+    <EQDHome counts={counts} news={news} />
   )
 }
