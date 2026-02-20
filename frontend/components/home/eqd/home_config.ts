@@ -14,7 +14,7 @@ export const home_config = {
     },
     fundamentalResearch:{
       label: 'Fundamental Research',
-      url: '/page/fundamental_research',
+      url: '/page/fundamental-research',
       target:'_self'
     },
     integration:{
@@ -56,7 +56,7 @@ export const home_config = {
     },
     team: {
       label: 'Our story',
-      url: '/page/about',
+      url: '/page/about-eqd',
       target: '_self'
     },
     github: {
