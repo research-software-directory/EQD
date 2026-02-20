@@ -9,8 +9,8 @@ import {getCommunityList} from '~/components/communities/apiCommunities'
 import CommunitiesOverviewClient from '~/components/communities/overview'
 
 export const metadata: Metadata = {
-  title: `Communities | ${app.title}`,
-  description: 'List of RSD communities.'
+  title: `EU Projects | ${app.title}`,
+  description: 'List of EU projects.'
 }
 
 export default async function CommunitiesOverviewPage({

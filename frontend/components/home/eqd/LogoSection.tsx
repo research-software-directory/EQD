@@ -5,6 +5,7 @@
 
 import LogoSURF from '~/assets/logos/LogoSurf.svg'
 import LogoLRZ from '~/assets/logos/LogoLRZ.svg'
+import LogoNLEsc from '~/assets/logos/LogoEscience.svg'
 
 export default function LogoSection() {
   return (
@@ -15,19 +16,20 @@ export default function LogoSection() {
         Partners supporting the European Quantum Directory
       </div>
       <div
-        className="flex gap-10 w-full flex-wrap mt-6 p-3 items-center opacity-30">
-        <LogoSURF className="max-h-[4rem]"/>
-        <LogoLRZ className = "max-h-[4rem]" />
+        className="flex gap-12 w-full flex-wrap mt-6 p-3 items-center opacity-30">
+        <LogoSURF className="max-h-[3rem]"/>
+        <LogoLRZ className = "max-h-[3rem]" />
         {/* Euro-Q-HPCI logo */}
         <img
-          style={{maxHeight:'4rem'}}
+          style={{maxHeight:'3rem'}}
           src="/images/euro-q-hpci.png" alt="euro-q-hpci logo"
         />
         {/* QEX logo */}
         <img
-          style={{maxHeight:'4rem'}}
+          style={{maxHeight:'3rem'}}
           src="/images/qex.png" alt="qex logo"
         />
+        <LogoNLEsc className = "max-h-[2.5rem]" />
       </div>
     </div>
   )
