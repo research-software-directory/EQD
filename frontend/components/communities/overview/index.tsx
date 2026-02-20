@@ -38,11 +38,11 @@ export default function CommunitiesOverview({
       {/* Page title with search and pagination */}
       <div className="flex flex-wrap mt-4 py-8 px-4 rounded-lg bg-base-100 lg:sticky top-0 border border-base-200 z-11">
         <h1 className="mr-4 lg:flex-1">
-          Communities
+          EU Projects
         </h1>
         <div className="flex-2 flex min-w-[20rem]">
           <SearchInput
-            placeholder="Search community by name or short description"
+            placeholder="Search by name or short description"
             onSearch={(search: string) => handleQueryChange('search', search)}
             defaultValue={search ?? ''}
           />
