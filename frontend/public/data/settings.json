@@ -1,14 +1,14 @@
 {
   "host": {
     "name": "eqd",
-    "email": "ariana.torres@surf.nl",
+    "email": "info@eqd.eu",
     "emailHeaders": [],
-    "logo_url": "/images/SURF_logo.svg",
+     "logo_url": null,
     "website": "https://www.surf.nl/",
     "feedback": {
       "enabled": true,
       "host_label": "EQD",
-      "url": "ariana.torres@surf.nl",
+      "url": "info@eqd.eu",
       "issues_page_url": "https://github.com/research-software-directory/EQD/issues"
     },
     "login_info_url":"https://research-software-directory.github.io/documentation/getting-access.html",
@@ -20,6 +20,16 @@
     "orcid_search":true
   },
   "modules":{
+    "communities": {
+      "active":true,
+      "name":"communities",
+      "menuItem":"Communities"
+    },
+    "persons": {
+      "active":true,
+      "name":"persons",
+      "menuItem": "Infrastructure"
+    },
     "projects":{
       "active":true,
       "name":"projects",
@@ -34,16 +44,6 @@
       "active":true,
       "name":"organisations",
       "menuItem":"Organisations"
-    },
-    "communities": {
-      "active":true,
-      "name":"communities",
-      "menuItem":"EU Projects"
-    },
-    "persons": {
-      "active":false,
-      "name":"persons",
-      "menuItem": "Persons"
     },
     "news": {
       "active":true,

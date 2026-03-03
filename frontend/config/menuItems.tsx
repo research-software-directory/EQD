@@ -24,7 +24,7 @@ import {RsdModuleName} from './rsdSettingsReducer'
 export type MenuModules = RsdModuleName | 'user'
 
 export type MenuItemType = {
-  type?: 'link' | 'function' |'divider' | 'pluginSlot'
+  type?: 'link' | 'function' |'divider' | 'pluginSlot' | 'module'
   label: string,
   // used as url link
   path?: string,

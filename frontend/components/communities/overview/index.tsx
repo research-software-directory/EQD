@@ -42,7 +42,7 @@ export default function CommunitiesOverview({
         </h1>
         <div className="flex-2 flex min-w-[20rem]">
           <SearchInput
-            placeholder="Search community by name or short description"
+            placeholder="Search by name or short description"
             onSearch={(search: string) => handleQueryChange('search', search)}
             defaultValue={search ?? ''}
           />

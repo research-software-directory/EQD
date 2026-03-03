@@ -34,11 +34,11 @@ export default function PersonsOverviewClient({pages,page,rows,search,persons}:P
       {/* Page header */}
       <div className="flex flex-wrap mt-4 py-8 px-4 rounded-lg bg-base-100 lg:sticky top-0 border border-base-200 z-11">
         <h1 className="mr-4 lg:flex-1">
-          Persons
+          Infrastucture
         </h1>
         <div className="flex-2 flex min-w-[20rem]">
           <SearchInput
-            placeholder="Search person by name or affiliation"
+            placeholder="Search by name or keyword"
             onSearch={(search: string) => handleQueryChange('search', search)}
             defaultValue={search ?? undefined}
           />
