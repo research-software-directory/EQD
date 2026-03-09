@@ -31,8 +31,16 @@ export default async function OrganisationPage({
     getActiveModuleNames()
   ])
 
-  const tab = query?.['tab'] ?? modules[0] as TabKey
-  // const layout = rsd_page_layout === 'masonry' ? 'grid' : rsd_page_layout
+  let tab:TabKey
+  if (query?.['tab']){
+    tab=query?.['tab'] as TabKey
+  } else if (modules.includes('software')){
+    tab = 'software'
+  } else if (modules.includes('projects')){
+    tab = 'projects'
+  } else {
+    tab = 'releases'
+  }
 
   // console.group('OrganisationPage')
   // console.log('slug...', slug)
