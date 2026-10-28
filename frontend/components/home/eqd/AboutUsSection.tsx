@@ -22,7 +22,7 @@ export default function AboutUsSection() {
       </h2>
       <p className="text-center text-lg mt-5" data-aos="fade"
         data-aos-delay="100" data-aos-duration="400" data-aos-easing="ease-in-out">
-        The European Quantum Directory (EQD) is an initiative led by several EuroHPC centres within the EuroHPC Joint Undertaking&apos;s Quantum Excellence Centre (QEX) that accelerates European quantum innovation and workforce development.
+        The European Quantum Directory (EQD) is an initiative led and coordinated by EuroQHPC-I, QEC4QEA and QEX.
         We welcome new partners, contributions and feedback—get in touch to help build Europe&apos;s open quantum commons.
       </p>
       <div
